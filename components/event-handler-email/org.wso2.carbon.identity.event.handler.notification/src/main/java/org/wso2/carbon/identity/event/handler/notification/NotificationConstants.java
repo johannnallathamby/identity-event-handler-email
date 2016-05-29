@@ -16,31 +16,18 @@
  * under the License.
  */
 
-package org.wso2.carbon.identity.event.handler.email.util;
+package org.wso2.carbon.identity.event.handler.notification;
 
-public interface Notification {
+public class NotificationConstants {
 
-    public String getSendTo();
+    private NotificationConstants() {
+    }
 
-    public void setSendTo(String sendTo);
+    public static final String EMAIL_TEMPLATE_PATH = "identity/Email/";
+    public static final String LOCALE_DEFAULT = "en_US";
+    public static final String TEMPLATE_CONTENT_TYPE_DEFAULT = "text/plain";
+    public static final String CLAIM_URI_LOCALE = "http://wso2.org/claims/locality";
+    public static final String CLAIM_URI_EMAIL = "http://wso2.org/claims/emailaddress";
+    public static final String DEFAULT_IDENTITY_PREFIX = "identity/";
 
-    public String getSendFrom();
-
-    public void setSendFrom(String sendFrom);
-
-    public String getSubject();
-
-    public void setSubject(String subject);
-
-    public String getBody();
-
-    public void setBody(String body);
-
-    public String getFooter();
-
-    public void setFooter(String footer);
-
-    public String getContentType();
-
-    public void setContentType(String type);
 }

@@ -16,18 +16,19 @@
  * under the License.
  */
 
-package org.wso2.carbon.identity.event.handler.email.internal;
+package org.wso2.carbon.identity.event.handler.notification.internal;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.service.component.ComponentContext;
+import org.wso2.carbon.event.stream.core.EventStreamService;
 import org.wso2.carbon.identity.event.handler.AbstractEventHandler;
-import org.wso2.carbon.identity.event.handler.email.handler.EmailEventHandler;
+import org.wso2.carbon.identity.event.handler.notification.NotificationHandler;
 import org.wso2.carbon.registry.core.service.RegistryService;
 import org.wso2.carbon.user.core.service.RealmService;
 
 /**
- * @scr.component name="org.wso2.carbon.identity.event.handler.email.internal.EmailEventServiceComponent"
+ * @scr.component name="identity.event.handler.notification"
  * immediate="true
  * @scr.reference name="registry.service"
  * interface="org.wso2.carbon.registry.core.service.RegistryService" cardinality="1..1"
@@ -35,60 +36,70 @@ import org.wso2.carbon.user.core.service.RealmService;
  * @scr.reference name="realm.service"
  * interface="org.wso2.carbon.user.core.service.RealmService"cardinality="1..1"
  * policy="dynamic" bind="setRealmService" unbind="unsetRealmService"
+ * * @scr.reference name="realm.service"
+ * interface="org.wso2.carbon.user.core.service.RealmService"cardinality="1..1"
+ * policy="dynamic" bind="setRealmService" unbind="unsetRealmService"
+ * * @scr.reference name="eventStreamManager.service"
+ * interface="org.wso2.carbon.event.stream.core.EventStreamService" cardinality="1..1"
+ * policy="dynamic" bind="setEventStreamService" unbind="unsetEventStreamService"
  */
-public class EmailEventServiceComponent {
+public class NotificationHandlerServiceComponent {
 
-    private static Log log = LogFactory.getLog(EmailEventServiceComponent.class);
-    private static RegistryService registryService;
-    private static RealmService realmService;
+    private static Log log = LogFactory.getLog(NotificationHandlerServiceComponent.class);
 
     protected void activate(ComponentContext context) {
         context.getBundleContext().registerService(AbstractEventHandler.class.getName(),
-                new EmailEventHandler(), null);
+                new NotificationHandler(), null);
         if (log.isDebugEnabled()) {
-            log.debug("Identity Management Listener is enabled");
+            log.debug("NotificationEventHandler is activated");
         }
     }
 
     protected void deactivate(ComponentContext context) {
         if (log.isDebugEnabled()) {
-            log.debug("Identity Management bundle is de-activated");
+            log.debug("NotificationEventHandler is deactivated");
         }
-    }
-
-    public static RegistryService getRegistryService() {
-        return registryService;
     }
 
     protected void setRegistryService(RegistryService registryService) {
         if (log.isDebugEnabled()) {
             log.debug("Setting the Registry Service");
         }
-        EmailEventServiceComponent.registryService = registryService;
+        NotificationHandlerDataHolder.getInstance().setRegistryService(registryService);
     }
 
     protected void unsetRegistryService(RegistryService registryService) {
         if (log.isDebugEnabled()) {
             log.debug("UnSetting the Registry Service");
         }
-        EmailEventServiceComponent.registryService = null;
-    }
-
-    public static RealmService getRealmService() {
-        return realmService;
+        NotificationHandlerDataHolder.getInstance().setRegistryService(null);
     }
 
     protected void setRealmService(RealmService realmService) {
         if (log.isDebugEnabled()) {
             log.debug("Setting the Realm Service");
         }
-        EmailEventServiceComponent.realmService = realmService;
+        NotificationHandlerDataHolder.getInstance().setRealmService(realmService);
     }
 
     protected void unsetRealmService(RealmService realmService) {
         if (log.isDebugEnabled()) {
             log.debug("UnSetting the Realm Service");
         }
-        EmailEventServiceComponent.realmService = null;
+        NotificationHandlerDataHolder.getInstance().setRealmService(null);
+    }
+
+    protected void setEventStreamService(EventStreamService eventStreamService) {
+        if (log.isDebugEnabled()) {
+            log.debug("Setting the Realm Service");
+        }
+        NotificationHandlerDataHolder.getInstance().setEventStreamService(eventStreamService);
+    }
+
+    protected void unsetEventStreamService(EventStreamService eventStreamService) {
+        if (log.isDebugEnabled()) {
+            log.debug("UnSetting the Realm Service");
+        }
+        NotificationHandlerDataHolder.getInstance().setEventStreamService(null);
     }
 }
